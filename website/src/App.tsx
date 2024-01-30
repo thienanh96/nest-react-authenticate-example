@@ -1,14 +1,9 @@
 import { store } from "./app/store"
-import { PrimeReactProvider } from "primereact/api"
 import { Provider } from "react-redux"
 
 // tailwind css
 import "./global.css"
 
-// primreact css
-import "primereact/resources/themes/lara-light-indigo/theme.css" // theme
-import "primeicons/primeicons.css"
-import "primereact/resources/primereact.css" // core css
 import "./App.css"
 import LoginForm from "./features/auth/LoginForm"
 import RegisterForm from "./features/auth/RegisterForm"
@@ -29,46 +24,44 @@ function App() {
   }, [])
 
   return (
-    <PrimeReactProvider>
-      <Provider store={store}>
-        <div className="App bg-[#DAE0E6] h-lvh w-lvw overflow-auto">
-          {auth.userInfo ? (
-            <div className="p-12">
-              <p>User logged in with profile:</p>
-              <p>ID: {auth.userInfo.id}</p>
-              <p>Email: {auth.userInfo.email}</p>
-              <p>Username: {auth.userInfo.username}</p>
-              <div className="mt-3">
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    dispatch(logoutUser())
-                  }}
-                >
-                  Logout
-                </Button>
-              </div>
+    <Provider store={store}>
+      <div className="App bg-[#DAE0E6] h-lvh w-lvw overflow-auto">
+        {auth.userInfo ? (
+          <div className="p-12">
+            <p>User logged in with profile:</p>
+            <p>ID: {auth.userInfo.id}</p>
+            <p>Email: {auth.userInfo.email}</p>
+            <p>Username: {auth.userInfo.username}</p>
+            <div className="mt-3">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  dispatch(logoutUser())
+                }}
+              >
+                Logout
+              </Button>
             </div>
-          ) : (
-            <>
-              {formType === "register" ? (
-                <RegisterForm
-                  switchToLoginForm={() => {
-                    setFormType("login")
-                  }}
-                />
-              ) : (
-                <LoginForm
-                  switchToRegisterForm={() => {
-                    setFormType("register")
-                  }}
-                />
-              )}
-            </>
-          )}
-        </div>
-      </Provider>
-    </PrimeReactProvider>
+          </div>
+        ) : (
+          <>
+            {formType === "register" ? (
+              <RegisterForm
+                switchToLoginForm={() => {
+                  setFormType("login")
+                }}
+              />
+            ) : (
+              <LoginForm
+                switchToRegisterForm={() => {
+                  setFormType("register")
+                }}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </Provider>
   )
 }
 
