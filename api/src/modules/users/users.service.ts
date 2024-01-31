@@ -23,18 +23,6 @@ export class UsersService {
     private readonly authService: AuthService,
   ) {}
 
-  findAll(): Promise<Users[]> {
-    return this.usersRepository.find();
-  }
-
-  findOne(id: number): Promise<Users | null> {
-    return this.usersRepository.findOneBy({ id });
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
-  }
-
   async signUp(userSignUpDto: UserSignUpDto) {
     const existingUser = await this.usersRepository.find({
       where: [

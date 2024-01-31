@@ -8,14 +8,18 @@ import {
 import { RootState } from "../../app/store"
 
 export interface IAuthState {
-  loading: boolean
   userInfo: IAuthUser | null
   error: any
   success: boolean
+  loadingCurrentUser?: boolean
+  signingUpUser?: boolean
+  loggingUserIn?: boolean
 }
 
 const initialState: IAuthState = {
-  loading: false,
+  loadingCurrentUser: true,
+  signingUpUser: false,
+  loggingUserIn: false,
   userInfo: null,
   error: null,
   success: false,
@@ -34,12 +38,12 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
-        state.loading = true
+        state.signingUpUser = true
       })
       .addCase(
         registerUser.fulfilled,
         (state, action: PayloadAction<IAuthUser>) => {
-          state.loading = false
+          state.signingUpUser = false
           state.success = true
           state.userInfo = action.payload
 
@@ -47,17 +51,17 @@ const authSlice = createSlice({
         },
       )
       .addCase(registerUser.rejected, (state, error) => {
-        state.loading = false
+        state.signingUpUser = false
         state.success = false
         state.error = error.payload as string[]
       })
       .addCase(loginUser.pending, (state) => {
-        state.loading = true
+        state.loggingUserIn = true
       })
       .addCase(
         loginUser.fulfilled,
         (state, action: PayloadAction<IAuthUser>) => {
-          state.loading = false
+          state.loggingUserIn = false
           state.success = true
           state.userInfo = action.payload
 
@@ -65,21 +69,26 @@ const authSlice = createSlice({
         },
       )
       .addCase(loginUser.rejected, (state, error) => {
-        state.loading = false
+        state.loggingUserIn = false
         state.success = false
         state.error = error.payload as string[]
       })
       .addCase(getCurrentUser.pending, (state) => {
-        state.loading = true
+        state.loadingCurrentUser = true
       })
       .addCase(
         getCurrentUser.fulfilled,
         (state, action: PayloadAction<IAuthUser>) => {
-          state.loading = false
+          state.loadingCurrentUser = false
           state.success = true
           state.userInfo = action.payload
         },
       )
+      .addCase(getCurrentUser.rejected, (state) => {
+        state.loadingCurrentUser = false
+        state.success = false
+        state.userInfo = null
+      })
   },
 })
 

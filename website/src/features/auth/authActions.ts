@@ -1,7 +1,7 @@
 import axios from "axios"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
-const backendURL = "http://localhost:3000"
+const backendURL = import.meta.env.VITE_BACKEND_URL
 
 export interface IAuthUser {
   id: string
@@ -38,7 +38,6 @@ export const registerUser = createAsyncThunk<
       )
       return data
     } catch (error: any) {
-      // return custom error message from backend if present
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message)
       } else {
@@ -65,7 +64,6 @@ export const loginUser = createAsyncThunk<
 
     return data
   } catch (error: any) {
-    // return custom error message from backend if present
     if (error.response && error.response.data.message) {
       return rejectWithValue(error.response.data.message)
     } else {
@@ -75,7 +73,7 @@ export const loginUser = createAsyncThunk<
 })
 
 export const getCurrentUser = createAsyncThunk(
-  "auth/current",
+  "users/current",
   async (data, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<IAuthUser>(

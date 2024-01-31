@@ -11,7 +11,7 @@ import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
 import { getCurrentUser } from "./features/auth/authActions"
 import { logoutUser, selectAuth } from "./features/auth/authSlice"
-import { Button } from "@mui/material"
+import { Button, CircularProgress } from "@mui/material"
 
 function App() {
   const [formType, setFormType] = useState<"login" | "register">("login")
@@ -22,6 +22,10 @@ function App() {
   useEffect(() => {
     dispatch(getCurrentUser())
   }, [])
+
+  if (auth.loadingCurrentUser) {
+    return <CircularProgress />
+  }
 
   return (
     <Provider store={store}>
